@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var arr=new Array();
+        function submit_chk(myForm){ //회원가입시 데이터저장 함수
+            var namevar = document.getElementById('user_name').value; //이름 변수
+            var telvar = document.getElementById('user_tel').value; //전화번호 변수
+            if(telvar.length !== 11)
+            {
+                alert("휴대폰번호 11자리의 숫자를 입력하세요.");
+                document.getElementById('user_tel').focus();
+            }
+            else{
+                var user = {name: namevar, tel: telvar}; //데이터쌍을 저장하는 user변수에 저장.
+                arr.push(user);         
+            }
+            return false;
+        }
+        function reset_chk(myForm){ //가입취소시 리셋 함수
+            document.getElementById('user_name').value = '';
+            document.getElementById('user_tel').value = '';
+            document.getElementById('user_name').focus();
+            arr = []; 
+            return false;
+        }
+        function print_data(){
+            var output = '';
+            if(arr.length === 0){
+                document.getElementById('output').innerHTML = ''; 
+            }
+            else{
+                for(let i of arr){
+                    output += i.name + ' : ' + i.tel + '<br>'; 
+                }
+                document.getElementById('output').innerHTML = output; 
+            }
+        }
+
+        function reset_print(){
+            document.getElementById('output').innerHTML = ''; 
+        }
+
+</script>
+</head>
+<body onload="document.f1.user_name.focus();">
+<form action="#" method="POST" name="f1" onsubmit="return submit_chk(this);" onreset="return reset_chk(this);">
+    <fieldset>
+        <legend>회원 가입</legend>
+        <p>
+            <label for="user_name">이름</label>
+            <input type ="text" name="user_name" id="user_name">
+        </p>
+        <p>
+            <label for="user_name">연락처</label>
+            <input type="text" name="user_tel" id="user_tel">
+        </p>
+        <p>
+            <input type="submit" value="회원가입">
+            <input type="reset" value="가입취소">
+        </p>
+    </fieldset>
+    </form>
+    <button id="print_button" class="print_data" onclick="print_data()">출력</button>
+    <button id="reset_button" class="reset_print" onclick="reset_print()">지우기</button>
+    <fieldset id="output"></fieldset>
+</body>
+</html>

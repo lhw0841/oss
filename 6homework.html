@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let s = prompt("이메일을 입력하세요.")
+        let reg = /^\w{3,12}@\w{3,12}/; 
+        let r1 = /.com$/;
+        let r = /@+./
+
+        console.log(reg.test(s))
+        console.log(r1.test(s))
+        console.log(r.test(s))
+        if(reg.test(s)==true){
+            if(r1.test(s)==true){
+                if(r.test(s)==true){
+                console.log(s);
+            }
+            else{
+                location.reload();
+            }
+            }
+            else{
+                location.reload();
+            }
+            
+        }
+        else{
+            location.reload();
+        }
+    </script>
+</body>
+</html>

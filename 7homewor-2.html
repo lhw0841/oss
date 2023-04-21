@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>D-Day for love</title>
+	<link href="css/d-day.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<div class="day1">
+			<h3>우리 만난지</h3>
+			<p id="accent" class="accent"><span style="font-size:0.6em; font-style:italic">며칠?</span></p>
+            <input type="text" id="firstinput" value="">
+            <input type="text" id="howlonginput" value="0">
+            <button onclick="calcDate_1()">계산</button>
+			</div>
+			<div class="bar">기념일 계산</div>
+			<div class="day2">
+				<ul>
+					<li class="item-title">100일</li>         
+					<li class="item-date" id="date100"></li>
+				</ul>
+				<ul>
+					<li class="item-title">200일</li>
+					<li class="item-date" id="date200"></li>
+				</ul>     
+				<ul>
+						<li class="item-title">1년</li>
+						<li class="item-date" id="date365"></li>
+					</ul>      
+				<ul>
+							<li class="item-title" id ="howlong1">500일</li>
+							<li class="item-date" id="howlong"></li>
+						</ul>      									     
+			</div>
+		</div>
+		<script>
+				var howlongday = document.getElementById("howlonginput").value;
+				var howlongday_1 = parseInt(document.getElementById("howlonginput").value)
+				
+			function calcDate_1(){ 
+				var howlongday = document.getElementById("howlonginput").value;
+				var howlongday_1 = parseInt(document.getElementById("howlonginput").value)
+				document.querySelector("#howlong1").innerText = howlongday + "일";
+                calcDate(100);  // 100일 기념일을 계산해서 표시합니다.
+                calcDate(200);  // 200일 기념일을 계산해서 표시합니다.
+                calcDate(365);  // 1년 기념일을 계산해서 표시합니다.
+                calcDate_2(howlongday_1);  // 500일 기념일을 계산해서 표시합니다.
+            }
+
+			function calcDate(days) {
+                var now = new Date(); // 오늘 날짜 정보를 Date 객체의 인스턴스 now 객체로 만듭니다.
+                var firstDay = new Date(document.getElementById("firstinput").value);  // 처음 만난 날의 날짜 정보를 firstDay 객체로 만듭니다. 
+                var toNow = now.getTime();  // 오늘 날짜를 밀리초로 바꿉니다.
+                var toFirst = firstDay.getTime();  // 처음 만난 날을 밀리초로 바꿉니다.
+                var passedTime = toNow - toFirst;  // 처음 만난 날과 오늘 사이의 차이 (밀리초)
+                var passedDay = Math.round(passedTime/(24*60*60*1000)); // 밀리초를 일로 변환 후 반올림합니다.
+                document.querySelector('#accent').innerText = passedDay + "일";  // #accent 영역에 표시합니다.
+                
+				var future = toFirst + days*(1000*60*60*24);  // 처음 만난 날에 밀리초로 바꾼 days일을 더합니다.
+				var someday = new Date(future);  // future 값을 사용해 Date 객체의 인스턴스를 만듭니다.
+				var year = someday.getFullYear( );  // ‘연도’를 가져와 year 변수에 저장합니다.
+				var month = someday.getMonth( ) + 1;  // ‘월’을 가져와 month 변수에 저장합니다.
+				var date = someday.getDate( );  // ‘일’을 가져와 date 변수에 저장합니다.
+				document.querySelector("#date"+days).innerText = year + "년 " + month + "월 " + date + "일";
+			}
+			function calcDate_2(days) {
+                var now = new Date(); // 오늘 날짜 정보를 Date 객체의 인스턴스 now 객체로 만듭니다.
+				var firstDay = new Date(document.getElementById("firstinput").value);  // 처음 만난 날의 날짜 정보를 firstDay 객체로 만듭니다. 
+                var toNow = now.getTime();  // 오늘 날짜를 밀리초로 바꿉니다.
+                var toFirst = firstDay.getTime();  // 처음 만난 날을 밀리초로 바꿉니다.
+                var passedTime = toNow - toFirst;  // 처음 만난 날과 오늘 사이의 차이 (밀리초)
+                var passedDay = Math.round(passedTime/(24*60*60*1000)); // 밀리초를 일로 변환 후 반올림합니다.
+                
+				var future = toFirst + days*(1000*60*60*24);  // 처음 만난 날에 밀리초로 바꾼 days일을 더합니다.
+				var someday = new Date(future);  // future 값을 사용해 Date 객체의 인스턴스를 만듭니다.
+				var year = someday.getFullYear( );  // ‘연도’를 가져와 year 변수에 저장합니다.
+				var month = someday.getMonth( ) + 1;  // ‘월’을 가져와 month 변수에 저장합니다.
+				var date = someday.getDate( );  // ‘일’을 가져와 date 변수에 저장합니다.
+				document.querySelector("#howlong").innerText = year + "년 " + month + "월 " + date + "일";
+
+				console.log(howlongday)
+				console.log(howlongday_1)
+
+			}
+		</script>
+	</body>
+	</html>
