@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--<script src="../09/jquery-3.7.0.min.js"></script>
+    <script src="../09/jquery-migrate-3.4.1.js"></script>!-->
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.1.js"></script>
+    </script>
+    <script>
+        $(document).ready(function(){
+            var $headers = $('h1');
+            for(var i =0; i<$headers.length; i++){
+                if(i%2 == 1){
+                    var domElement = $headers.get(i);
+                    $(domElement).css('backgroundColor','lime');
+                }
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('h2').each(function(index, element){
+                if(index%2==1){
+                    $(this).css('backgroundColor','skyblue')
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            for(var i = 0; i<256; i++){
+                $('<div></div>').css({
+                    height:2,
+                    background : 'rgb(' +i +','+i+','+i+')'
+                }).append('body');
+            }
+        })
+    </script>
+</head> 
+<body>
+    <h1>Header1</h1>
+    <h1>Header2</h1>
+    <h1>Header3</h1>
+    <h1>Header4</h1>
+
+    <h2>Header4</h2>
+    <h2>Header5</h2>
+    <h2>Header6</h2>
+    <h2>Header7</h2>
+
+    <script>
+        $(document).ready(function(){
+            $('h1').css('backgroundColor','red');
+        });
+        
+    </script>
+    <h1>jQuery</h1>
+    <script>
+        $(function(){
+            $('#2nd').nextAll().css("backgroundColor","skyblue")
+        });
+    </script>
+    <div>
+        <ul id="list1">
+            <li>리스트1</li>
+            <li id="2nd">리스트2</li>
+            <li>리스트3</li>
+            <ul>
+                <li>list 3-1</li>
+            </ul>
+        </ul>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('img').each(function(index, item){
+                $(this).attr('src','http://placehold.it/' + (index+1)*100 + 'x100');
+            });
+            s = $('#im').prop('tagName')
+            console.log(s);
+        });
+    </script>
+        <img  id="im"/>
+        <img />
+        <img />
+</body>
+</html>
