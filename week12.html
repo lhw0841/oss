@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.1.js"></script>
+    <h1>인접 관계 <span>선택자</span></h1>
+    <p>내용1</p>
+    <p style="display: none">내용2</p>
+    <script>
+        $(function(){
+            $('p:visible').css("border","1px solid red");
+            $('p:hidden').css("color","red");
+            //$('p:hidden').css("display","block");
+        })
+    </script>
+    <ul id="menu">
+        <li>내용1</li>
+        <li>내용2</li>
+        <li>내용3</li>
+        <ul>
+            <li>내용3-1</li>
+            <li>내용3-2</li>
+            <li>내용3-3</li>
+            <li>내용3-4</li>
+        </ul>
+        <li>내용4</li>
+        <li>내용5</li>
+        <li>내용6</li>
+    </ul>
+    <script>
+        $(function(){
+            $('#menu li:first').css("background-color","yellow");
+            $('#menu li:last').css("background-color","green");
+            $('#menu li:even').css("color","red");
+            $('#menu li:odd').css("background-color","skyblue");
+            $('#menu li:first-of-type').css("color","blue");
+            $('#menu li:last-of-type').css("background-color","gray");
+            $('#li:only-child').css("color","yellowgreen");
+            $('span:only-child').css("background-color","yellow");
+            $('#menu>li').slice(2).css("background-color","red");
+        });
+    </script>
+</body>
+</html>
