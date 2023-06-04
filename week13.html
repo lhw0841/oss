@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        *{margin:0;padding:0;}
+        body{margin:20px;}
+        #wrap{background-color:#ccc;padding:10px;}
+        p{background-color:#999;}
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.1.js"></script>
+    <div id="wrap">
+        <button id="btn1">버튼1</button>
+        <button id="btn2">버튼2</button>
+        <button>버튼3</button>
+        <button>버튼4</button>
+        <button>버튼5</button>
+    </div>
+    <p></p>
+    <h1>Header</h1>
+</body>
+<script>
+    // $(document).ready(function(){
+    //     $('h1').css("color","blue");
+    //     $('h1').on('click',function(event){
+    //         $('<h1></h1>').text($(this).text()).appendTo('body');
+    //     });
+    // });
+    $(document).ready(function(){
+        $('h1').css("color","blue");
+        var handler = function(){
+            $('<h1></h1>').text($(this).text()).on('click',handler).appendTo('body');
+        }
+        $('h1').on('click',handler);
+    });
+</script>
+<script>
+    $(function(){
+        $("#wrap").mouseout(function(){
+            $("#wrap").css("border","2px solid red");
+        });
+    });
+    $(function(){
+        $("#wrap").mouseleave(function(){
+            $("#wrap").css("background-color","skyblue");
+        });
+    });
+    $("#btn1").focusin(function(){
+        $(this).css("color","red");
+    })
+    $("#btn1").focus();
+    $("btn2").focusout(function(){
+        $(this).css("color","blue")
+    });
+    $(function(){
+        $(document).mousemove(function(e){
+            var x = e.pageX
+            var y = e.pageY
+            $("p").text("x: "+x+" y: "+y)
+        });
+    })
+
+    $("button").click(function(e){
+        $(e.target).css("background-color","red");
+        console.log(e);
+    })
+    
+</script>
+</html>
