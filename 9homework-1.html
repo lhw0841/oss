@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="input">
+        <input type="text" id="intext"></input>
+        <button id="btn" onclick="addText(); return false;">추가</button>
+        <button id="insert" onclick="insertText(); return false;">삽입</button>
+        <button id="del" onclick="reset(); return false;">초기화</button>
+        <button id="delFirst" onclick="deleteFirst(); return false;">첫번째 삭제</button>
+        <button id="delLast" onclick="deleteLast(); return false;">마지막 삭제</button>
+    </div>
+    <div id="out"></div>
+    <script>
+        function addText(){
+            var newP = document.createElement("p");  // 새 p 요소 만들기 
+            var intext = document.querySelector("#intext");					
+            var newText = document.createTextNode(intext.value);  // 새 텍스트 노드 만들기
+	        newP.appendChild(newText);  // 텍스트 노드를 p 요소의 자식 요소로 연결하기
+            
+            var out = document.querySelector("#out");
+            out.appendChild(newP);
+            intext.value = "";
+        }
+        
+        function insertText(){
+            var newP = document.createElement("p");  // 새 p 요소 만들기 
+            var intext = document.querySelector("#intext");					
+            var newText = document.createTextNode(intext.value);  // 새 텍스트 노드 만들기
+	        newP.appendChild(newText);  // 텍스트 노드를 p 요소의 자식 요소로 연결하기
+            
+            var out = document.querySelector("#out");
+            out.insertBefore(newP, out.firstChild);
+            intext.value = "";
+        }
+        
+        function reset(){
+            var out = document.querySelector("#out");
+            while (out.firstChild) {
+                out.removeChild(out.firstChild);
+            }
+        }
+        
+        function deleteFirst(){
+            var out = document.querySelector("#out");
+            if (out.firstChild) {
+                out.removeChild(out.firstChild);
+            }
+        }
+        
+        function deleteLast(){
+            var out = document.querySelector("#out");
+            if (out.lastChild) {
+                out.removeChild(out.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>
