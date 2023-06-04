@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Your Page Title</title>
+</head>
+<body>
+    <div id="part1">
+        <p>로그인</p>
+        <form id="login-form">
+        <input type="text" id="username" placeholder="id">
+        <input type="password" id="password" placeholder="pw">
+        <button type="submit">Login</button>
+        </form>
+        <p>회원 가입</p>
+        <form id="signup-form">
+            <input type="text" id="signup-username" placeholder="id">
+            <input type="password" id="signup-password"placeholder="pw">
+            <button type="submit">Sign Up</button>
+        </form>
+       </div>
+
+       <div id="part2" style="display: none;">
+        <h1>관리자 모드</h1>
+        <ul>
+            <li>학생정보 관리</li>
+            <button id="management-details">관리 내역</button>
+            <li>수강 교과목 관리</li>
+            <button id="view">교과목 보기</button>
+            <button id="add">교과목 추가</button>
+            <button id="delete">교과목 삭제</button>
+        </ul>
+        <div id="member-info" style="display: none;"></div>
+        <button id="part1btn">메인으로 가기</button>
+        <div id="course-list"></div>
+      </div>
+
+    <div id="part3" style="display: none;">
+        <button id="view_app">수강 신청 내역 보기</button>
+        <button id="app">수강 신청 하기</button>
+        <button id="delete_app">수강 삭제 하기</button>
+        <button id="part1_btn">메인으로 가기</button>
+        <div id="show_app"></div>
+    </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <script>
+        var currentScreen = '#part1'; 
+        // 로그인 접근 이벤트
+        $('#login-form').submit(function(event) {
+        event.preventDefault(); 
+        // 로그인 체크후 part2/part3 으로 전송
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var isAdmin = (username === 'admin' && password === 'admin123'); 
+        var memberIndex = members.findIndex(member => member.username === username && member.password === password); 
+        if (isAdmin) {
+            showScreen('#part2');
+        } else if (memberIndex !== -1) {
+            // 회원의 로그인 횟수 증가
+            members[memberIndex].loginCount++;
+            showScreen('#part3');
+        } else {
+            alert('Invalid username or password');
+        }
+        });
+
+        // 화면 전환 함수
+        function showScreen(screenId) {
+        $(currentScreen).hide();
+        $(screenId).show();
+        // 현재 스크린 변수에 새로 입력된 스크린 덮어씀
+        currentScreen = screenId;
+        }
+        // 메인으로 돌아가는 함수 추가
+        $('#part1btn').click(function() {
+            showScreen('#part1');
+        });
+        $('#part1_btn').click(function() {
+            showScreen('#part1');
+        });
+        
+        var members = []; 
+
+        // 회원가입시 함수
+        $('#signup-form').submit(function(event) {
+        event.preventDefault();
+        var username = $('#signup-username').val();
+        var password = $('#signup-password').val();
+
+        // 정규표현식으로 id 검사
+        var usernameRegex = /^[a-zA-Z0-9]{4,10}$/;
+        if (!usernameRegex.test(username)) {
+            alert('ID 오류 : 4-10 글자 사이의 숫자와 문자만 입력하세요');
+            return;
+        }
+
+        // 정규표현식으로 pw 검사
+        var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            alert('PW 오류 : 8글자 이상의 숫자와 문자 하나씩을 포함해야 합니다.');
+            return;
+        } 
+
+        // id 중복 검사
+        var existingUsernames = ['admin', 'member']; 
+        if (existingUsernames.includes(username) || members.some(member => member.username === username)) {
+            alert('id 가 이미 존재합니다.');
+            return;
+        }
+
+        // 회원 정보 저장
+        members.push({username: username, password: password, loginCount: 0});
+        alert('회원가입 성공');
+        });
+
+        // 관리 메뉴 클릭시 이벤트 구현
+        $('#management-details').click(function() {
+        // 관리 메뉴 클릭 토글 구현
+        if ($('#member-info').is(':visible')) {
+            $('#member-info').hide();
+        } else {
+            var memberInfo = '<h2>회원 정보</h2><ul>';
+            for (var i = 0; i < members.length; i++) {
+            // 회원의 수강 신청 내역 가져오기
+            var memberApplications = applications.filter(application => application.username === members[i].username);
+            var applicationList = memberApplications.map(application => application.course).join(', ');
+            memberInfo += '<li>' + members[i].username + ': ' + members[i].password + ' (로그인 횟수: ' + members[i].loginCount + ', 수강 신청 내역: ' + applicationList + ')</li>';
+            }
+            memberInfo += '</ul>';
+            $('#member-info').html(memberInfo);
+            $('#member-info').show();
+        }
+        });
+        
+        // 교과목 배열 추가
+        var courses = ['소프트웨어 설계및 실습', 'C 프로그래밍', '컴퓨터네트워크','java'];
+
+        // 교과목 보기 버튼 클릭 이벤트 수정
+        $('#view').click(function() {
+            // 교과목 목록을 문자열로 변환하여 div에 출력
+            var courseList = courses.join(', ');
+            $('#course-list').text('교과목 목록: ' + courseList);
+        });
+
+        // 교과목 추가 버튼 클릭 이벤트 추가
+        $('#add').click(function() {
+            // 입력칸 생성
+            var courseInput = prompt('추가할 교과목을 입력하세요');
+            // 입력값이 있을 경우 배열에 추가
+            if (courseInput) {
+                if (courses.includes(courseInput)) {
+                    alert(courseInput + ' 교과목이 이미 존재합니다.');
+                } else {
+                    courses.push(courseInput);
+                    alert(courseInput + ' 교과목이 추가되었습니다.');
+                }
+            }
+        });
+
+
+        // 교과목 삭제 버튼 클릭 이벤트 추가
+        $('#delete').click(function() {
+        // 입력칸 생성
+        var courseInput = prompt('삭제할 교과목을 입력하세요');
+        // 입력값이 있을 경우 배열에서 삭제
+        if (courseInput) {
+            var index = courses.indexOf(courseInput);
+            if (index !== -1) {
+                courses.splice(index, 1);
+                alert(courseInput + ' 교과목이 삭제되었습니다.');
+            } else {
+                alert('해당 교과목이 존재하지 않습니다.');
+            }
+        }
+        });
+
+        // 수강 신청 과목 배열 추가
+        var applications = [];
+        // 수강 신청 내역 보기 버튼 클릭 이벤트 추가
+        $('#view_app').click(function() {
+            // 현재 로그인한 회원의 아이디 가져오기
+            var currentUsername = $('#username').val();
+            // 회원의 수강 신청 내역 가져오기
+            var memberApplications = applications.filter(application => application.username === currentUsername);
+            var applicationList = memberApplications.map(application => application.course).join(', ');
+            // 수강 신청 내역을 문자열로 변환하여 div에 출력
+            $('#show_app').text('수강 신청 내역: ' + applicationList);
+        });
+
+
+        // 수강 신청 하기 버튼 클릭 이벤트 수정
+        $('#app').click(function() {
+        // 교과목 목록을 문자열로 변환하여 div에 출력
+        var courseList = courses.join(', ');
+        $('#show_app').html('교과목 목록: ' + courseList + '<br>신청할 교과목을 입력하세요: <input type="text" id="application-input"><button id="submit-application">신청하기</button>');
+        
+        // 신청하기 버튼 클릭 이벤트 추가
+        $('#submit-application').click(function() {
+            // 입력값 가져오기
+            var applicationInput = $('#application-input').val();
+            // 입력값이 있을 경우 배열에 추가
+            if (applicationInput) {
+                // 현재 로그인한 회원의 아이디 가져오기
+                var currentUsername = $('#username').val();
+                var existingApplication = applications.find(application => application.username === currentUsername && application.course === applicationInput);
+                if (existingApplication) {
+                    alert('이미 ' + applicationInput + ' 과목을 수강 신청하였습니다.');
+                } else {
+                    applications.push({username: currentUsername, course: applicationInput});
+                    alert(applicationInput + ' 과목이 수강 신청되었습니다.');
+                }
+            }
+        });
+        });
+        
+        // 수강 삭제 하기 버튼 클릭 이벤트 수정
+        $('#delete_app').click(function() {
+            // 입력칸 생성
+            $('#show_app').html('삭제할 교과목을 입력하세요: <input type="text" id="delete-input"><button id="submit-delete">삭제하기</button>');
+
+            // 삭제하기 버튼 클릭 이벤트 추가
+            $('#submit-delete').click(function() {
+                // 입력값 가져오기
+                var deleteInput = $('#delete-input').val();
+                // 입력값이 있을 경우 배열에서 삭제
+                if (deleteInput) {
+                // 현재 로그인한 회원의 아이디 가져오기
+                var currentUsername = $('#username').val();
+                var index = applications.findIndex(application => application.username === currentUsername && application.course === deleteInput);
+                if (index !== -1) {
+                    applications.splice(index, 1);
+                    alert(deleteInput + ' 과목이 수강 삭제되었습니다.');
+                } else {
+                    alert('해당 교과목이 존재하지 않습니다.');
+                }
+                }
+            });
+        });
+
+
+
+  </script>
+</body>
+</html>
