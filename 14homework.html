@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Open a new window
+        var newWindow = window.open('https://www.google.co.kr', '', 'width=500,height=500');
+        var childWindow = window.open('https://www.google.co.kr', '', 'width=300,height=300');
+        
+        childWindow.resizeTo(newWindow.screenX, newWindow.screenY);
+    </script>
+</body>
+</html>
