@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.1.js"></script>
+</head>
+<body>
+    <button id="addbtn">버튼추가하기</button>
+
+    <script>
+        $("#addbtn").on("click", function(event) {
+            var div = $("<div></div>");
+            $("body").append(div);
+
+            var h3 = $("<h3></h3>").text(0);
+            div.append(h3);
+
+            var increaseButton = $("<button id='increase'></button>").text("increase").appendTo(div);
+            var decreaseButton = $("<button id='decrease'></button>").text("decrease").appendTo(div);
+                    
+            div.on("click", "#increase", function(event) {
+                h3.text(parseInt(h3.text()) + 1);
+            });
+
+            div.on("click", "#decrease", function(event) {
+                h3.text(parseInt(h3.text()) - 1);
+            });
+        });
+    </script>
+</body>
+</html>
