@@ -1,0 +1,14 @@
+a=int(input("밑: "))
+b=int(input("지수: "))
+c = a**b
+print(c)
+
+d,e = input("INPUT : ").split()
+f = int(d)
+g = int(e)
+print("OUTPUT : ")
+print(f+g)
+print(f*g)
+print(f/g)
+print(f//g)
+print(f%g)
