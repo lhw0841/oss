@@ -1,99 +1,99 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <fstream>
-#include <queue>
-#include <stack>
-#include <vector>
+#include <cstdio>
+#include <cstring>
 #include <algorithm>
-#include <list>
+#include <queue>
 
 using namespace std;
 
-int main() {
-    ifstream in("page.inp");
-    ofstream out("page.out");
+int n, m;
+int a[10005], b[10005];
+int f[10005], l[10005], o[10005];
 
-    int frameSize;
-    in >> frameSize;
-
-    vector<int> referenceString;
-    int reference;
-    while (in >> reference) {
-        if (reference == -1) break;
-        referenceString.push_back(reference);
-    }
-
-    // FIFO
-    queue<int> fifoQueue;
-    vector<bool> fifoPresent(10001, false);
-    int fifoPageFaults = 0;
-    for (int i = 0; i < referenceString.size(); i++) {
-        if (!fifoPresent[referenceString[i]]) {
-            fifoPageFaults++;
-            if (fifoQueue.size() == frameSize) {
-                int removed = fifoQueue.front();
-                fifoQueue.pop();
-                fifoPresent[removed] = false;
+void FIFO() {
+    queue<int> q;
+    int cnt = 0;
+    for (int i = 1; i <= m; i++) {
+        if (q.size() < n) {
+            if (!f[a[i]]) {
+                q.push(a[i]);
+                f[a[i]] = 1;
+                cnt++;
             }
-            fifoQueue.push(referenceString[i]);
-            fifoPresent[referenceString[i]] = true;
-        }
-    }
-    out << "FIFO: " << fifoPageFaults << endl;
-
-    // LRU
-    list<int> lruList;
-    vector<bool> lruPresent(10001, false);
-    int lruPageFaults = 0;
-    for (int i = 0; i < referenceString.size(); i++) {
-        if (!lruPresent[referenceString[i]]) {
-            lruPageFaults++;
-            if (lruList.size() == frameSize) {
-                int removed = lruList.back();
-                lruList.pop_back();
-                lruPresent[removed] = false;
-            }
-            lruList.push_front(referenceString[i]);
-            lruPresent[referenceString[i]] = true;
         }
         else {
-            lruList.remove(referenceString[i]);
-            lruList.push_front(referenceString[i]);
-        }
-    }
-    out << "LRU: " << lruPageFaults << endl;
-
-
-    // OPT
-    vector<int> optFrame(frameSize, -1);
-    int optPageFaults = 0;
-    for (int i = 0; i < referenceString.size(); i++) {
-        bool found = false;
-        for (int j = 0; j < frameSize; j++) {
-            if (optFrame[j] == referenceString[i]) {
-                found = true;
-                break;
+            if (!f[a[i]]) {
+                int x = q.front();
+                q.pop();
+                f[x] = 0;
+                q.push(a[i]);
+                f[a[i]] = 1;
+                cnt++;
             }
         }
-        if (!found) {
-            optPageFaults++;
-            vector<int> nextUse(frameSize, 10001);
-            for (int j = 0; j < frameSize; j++) {
-                for (int k = i + 1; k < referenceString.size(); k++) {
-                    if (referenceString[k] == optFrame[j]) {
-                        nextUse[j] = k;
-                        break;
-                    }
+    }
+    printf("FIFO: %d\n", cnt);
+}
+
+void LRU() {
+    int cnt = 0;
+    for (int i = 1; i <= m; i++) {
+        if (l[a[i]]) {
+            b[l[a[i]]] = i;
+        }
+        else {
+            if (l[a[i - n]]) {
+                f[l[a[i - n]]] = 0;
+            }
+            l[a[i]] = i;
+            b[i] = a[i];
+            f[a[i]] = 1;
+            cnt++;
+        }
+    }
+    printf("LRU: %d\n", cnt);
+}
+
+void OPT() {
+    int cnt = 0;
+    for (int i = 1; i <= m; i++) {
+        if (o[a[i]]) {
+            continue;
+        }
+        if (o[0] < n) {
+            o[0]++;
+            o[a[i]] = o[0];
+        }
+        else {
+            int x = -1, y = -1;
+            for (int j = i + 1; j <= m; j++) {
+                if (!x || b[o[b[x]]] > b[o[b[j]]]) {
+                    x = j;
+                }
+                if (!y || b[o[b[y]]] < b[o[b[j]]]) {
+                    y = j;
                 }
             }
-            int maxIndex = max_element(nextUse.begin(), nextUse.end()) - nextUse.begin();
-            optFrame[maxIndex] = referenceString[i];
+            o[b[o[b[x]]]] = 0;
+            o[a[i]] = o[b[y]];
         }
+        b[i] = a[i];
+        cnt++;
     }
-    out << "OPT: " << optPageFaults << endl;
+    printf("OPT: %d\n", cnt);
+}
 
-    in.close();
-    out.close();
-
-    return 0;
+int main() {
+    freopen("page.inp", "r", stdin);
+    freopen("page.out", "w", stdout);
+    scanf("%d", &n);
+    while (~scanf("%d", &a[++m])) {}
+    m--;
+    LRU();
+    memset(f, 0, sizeof(f));
+    memset(o, 0, sizeof(o));
+    OPT();
+    memset(f, 0, sizeof(f));
+    FIFO();
 }
